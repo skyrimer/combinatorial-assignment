@@ -10,7 +10,6 @@ def solve_advanced_case():
         students, courses, preferences, credits
     )
 
-    # 2. Model Setup
     m = gp.Model("CourseAllocation_AdvancedCase")
 
     # Variables
@@ -20,26 +19,21 @@ def solve_advanced_case():
         for j in courses
     }
     l = {i: m.addVar(vtype=GRB.BINARY, name=f"l_{i}") for i in students}
-    # New Variable: Capacity increase n_j (0, 1, or 2)
     n = {j: m.addVar(vtype=GRB.INTEGER, lb=0, ub=2, name=f"n_{j}") for j in courses}
 
-    # Total Satisfaction Expression
     total_satisfaction = gp.quicksum(
         weights[j] * (6 - ranks[(i, j)]) * x[(i, j)]
         for i in students
         for j in preferences[i]
     )
 
-    # Student 8 Satisfaction Expression
     student_8_satisfaction = gp.quicksum(
         weights[j] * (6 - ranks[(8, j)]) * x[(8, j)] for j in preferences[8]
     )
 
-    # Big M for Hierarchical Optimization (Prioritize Student 8)
     M = 1000
     m.setObjective(M * student_8_satisfaction + total_satisfaction, GRB.MAXIMIZE)
 
-    # Constraints
     # C1: Flexible Capacity (Sum x <= Cap + n)
     for j in courses:
         m.addConstr(
@@ -76,10 +70,7 @@ def solve_advanced_case():
     for i in students:
         m.addConstr(x[(i, "Algebra")] + x[(i, "Analytics")] <= 1, name=f"Conflict_{i}")
 
-    # 3. Solve and Report
     m.optimize()
-
-    # Custom reporting for Advanced Case (to show capacity increases)
     if m.status == GRB.OPTIMAL:
         print_solution(
             m, students, courses, x, weights, ranks, credits, "Advanced Case"

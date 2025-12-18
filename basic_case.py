@@ -10,7 +10,6 @@ def solve_base_case():
         students, courses, preferences, credits
     )
 
-    # 2. Model Setup
     m = gp.Model("CourseAllocation_BaseCase")
 
     # Variables
@@ -63,9 +62,9 @@ def solve_base_case():
             gp.quicksum(x[(i, j)] for j in top_2[i]) >= l[i], name=f"Link_Top2_{i}"
         )
 
-    # 3. Solve and Report
     m.optimize()
-    print_solution(m, students, courses, x, weights, ranks, credits, "Base Case")
+    if m.status == GRB.OPTIMAL:
+        print_solution(m, students, courses, x, weights, ranks, credits, "Base Case")
 
 
 if __name__ == "__main__":
