@@ -91,5 +91,5 @@ def validate_data(students, courses, capacities, credits, preferences):
         isinstance(capacity, int) and capacity >= 0 for capacity in capacities.values()
     ), "Course capacities must be non-negative integers"
     assert all(
-        isinstance(credits, int) and credit >= 0 for credit in credits.values()
+        isinstance(credit, int) and credit >= 0 for credit in credits.values()
     ), "Course credits must be non-negative integers"

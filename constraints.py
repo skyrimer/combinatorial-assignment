@@ -39,7 +39,7 @@ def print_solution(
             )
             total_credits = sum(credits_dict[j] for j in assigned)
             print(
-                f"  Student {i:2}: {assigned} (Sat: {int(satisfaction)}, Credits: {total_credits})"
+                f"  Student {i:2}: {', '.join(assigned)} (Satisfaction: {int(satisfaction)}, Total Credits: {total_credits})"
             )
     else:
         print(f"Model did not reach optimality: {m.status}")
