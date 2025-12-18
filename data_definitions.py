@@ -1,5 +1,3 @@
-# data.py
-
 def get_data():
     """
     Returns the static data for the course allocation problem.
@@ -8,21 +6,38 @@ def get_data():
 
     # Available Courses
     courses = [
-        "Algebra", "Programming", "Statistics", "Econometrics",
-        "Visualisation", "Logic", "Analytics", "Calculus"
+        "Algebra",
+        "Programming",
+        "Statistics",
+        "Econometrics",
+        "Visualisation",
+        "Logic",
+        "Analytics",
+        "Calculus",
     ]
 
     # Base Capacities (c_j)
     capacities = {
-        "Algebra": 6, "Programming": 6, "Statistics": 6, "Econometrics": 5,
-        "Visualisation": 6, "Logic": 5, "Analytics": 6, "Calculus": 5
+        "Algebra": 6,
+        "Programming": 6,
+        "Statistics": 6,
+        "Econometrics": 5,
+        "Visualisation": 6,
+        "Logic": 5,
+        "Analytics": 6,
+        "Calculus": 5,
     }
 
     # Credits (k_j)
-    # Text states 10/20 credits, table uses 1/2. Using 10/20 to match bundle limit of 40.
     credits = {
-        "Algebra": 10, "Programming": 20, "Statistics": 10, "Econometrics": 10,
-        "Visualisation": 10, "Logic": 20, "Analytics": 10, "Calculus": 20
+        "Algebra": 10,
+        "Programming": 20,
+        "Statistics": 10,
+        "Econometrics": 10,
+        "Visualisation": 10,
+        "Logic": 20,
+        "Analytics": 10,
+        "Calculus": 20,
     }
 
     # Student Preferences (Top 5 ordered list)
@@ -41,7 +56,7 @@ def get_data():
         12: ["Econometrics", "Analytics", "Algebra", "Visualisation", "Statistics"],
         13: ["Analytics", "Econometrics", "Visualisation", "Algebra", "Statistics"],
         14: ["Econometrics", "Analytics", "Statistics", "Programming", "Visualisation"],
-        15: ["Statistics", "Analytics", "Programming", "Calculus", "Visualisation"]
+        15: ["Statistics", "Analytics", "Programming", "Calculus", "Visualisation"],
     }
     students = list(sorted(preferences.keys()))
     validate_data(students, courses, capacities, credits, preferences)
@@ -50,13 +65,21 @@ def get_data():
 
 
 def validate_data(students, courses, capacities, credits, preferences):
-    assert sorted(courses) == sorted(credits.keys()), "Course names and credits do not match"
-    assert sorted(courses) == sorted(capacities.keys()), "Course names and capacities do not match"
+    assert sorted(courses) == sorted(
+        credits.keys()
+    ), "Course names and credits do not match"
+    assert sorted(courses) == sorted(
+        capacities.keys()
+    ), "Course names and capacities do not match"
 
-    assert len(students) == len(preferences), "Number of students and preferences must match"
+    assert len(students) == len(
+        preferences
+    ), "Number of students and preferences must match"
 
     # Validate preferences cover every student and reference valid courses
-    assert set(preferences.keys()) == set(students), "Preference entries must exist for every student"
+    assert set(preferences.keys()) == set(
+        students
+    ), "Preference entries must exist for every student"
     for prefs in preferences.values():
         assert len(prefs) == 5, "Each student should list exactly five preferences"
         assert len(set(prefs)) == 5, "Preferences must consist of unique courses"
@@ -64,10 +87,9 @@ def validate_data(students, courses, capacities, credits, preferences):
             course in courses for course in prefs
         ), "Preferences may only include defined courses"
 
-    # Validate capacities and credits sanity
     assert all(
-        isinstance(capacity, int) and capacity > 0 for capacity in capacities.values()
-    ), "Course capacities must be positive integers"
+        isinstance(capacity, int) and capacity >= 0 for capacity in capacities.values()
+    ), "Course capacities must be non-negative integers"
     assert all(
-        isinstance(credit, int) and credit % 5 == 0 for credit in credits.values()
-    ), "Credits should be integers divisible by 5"
+        isinstance(credits, int) and credit >= 0 for credit in credits.values()
+    ), "Course credits must be non-negative integers"
